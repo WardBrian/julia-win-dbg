@@ -25,6 +25,9 @@ jobs:
         julia-version: ["1"]
         shell: [bash, pwsh]
       fail-fast: false
+    defaults:
+      run:
+        shell: ${{ matrix.shell }}
     steps:
       - name: Check out github
         uses: actions/checkout@v5
@@ -43,4 +46,3 @@ jobs:
         run:
           cd cmdstan/
           julia --project=. --eval "run(`make build`)"
-        shell: ${{ matrix.shell }}
