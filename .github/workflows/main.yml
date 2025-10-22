@@ -23,6 +23,7 @@ jobs:
       matrix:
         os: [windows-latest]
         julia-version: ["1"]
+        shell: [bash, pwsh]
       fail-fast: false
     steps:
       - name: Check out github
@@ -41,4 +42,5 @@ jobs:
       - name: run make inside julia
         run:
           cd cmdstan/
-          julia -e 'run(`make build`)'
+          julia --project=. --eval "run(`make build`)"
+        shell: ${{ matrix.shell }}
