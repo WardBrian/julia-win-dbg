@@ -8,7 +8,6 @@ on:
   workflow_dispatch: {}
 
 jobs:
-
   julia:
     runs-on: ${{matrix.os}}
     strategy:
@@ -16,6 +15,7 @@ jobs:
         os: [windows-latest, ubuntu-latest]
         julia-version: ["1.12", "lts"]
         shell: [bash, pwsh]
+        use-julia: [true, false]
       fail-fast: false
     defaults:
       run:
@@ -33,6 +33,15 @@ jobs:
         run: git clone --recursive https://github.com/stan-dev/cmdstan.git --depth 1 --shallow-submodules
 
       - name: run make inside julia
+        if: matrix.use-julia == true
         timeout-minutes: 60
         run: |
           julia --project=. ./run.jl
+
+      - name: run make directly
+        if: matrix.use-julia == false
+        timeout-minutes: 60
+        run: |
+          cd cmdstan
+          make help
+          make build
