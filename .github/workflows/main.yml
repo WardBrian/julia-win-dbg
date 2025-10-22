@@ -30,7 +30,7 @@ jobs:
           version: ${{ matrix.julia-version }}
 
       - name: download large repo
-        run: git clone --recursive https://github.com/stan-dev/cmdstan.git --depth 1 --shallow-submodules
+        run: git clone --recursive https://github.com/roualdes/bridgestan.git --depth 1 --shallow-submodules
 
       - name: run make inside julia
         if: matrix.use-julia == true
@@ -42,6 +42,5 @@ jobs:
         if: matrix.use-julia == false
         timeout-minutes: 60
         run: |
-          cd cmdstan
-          make help
-          make build
+          cd bridgestan
+          make test_models/bernoulli/bernoulli_model.so
