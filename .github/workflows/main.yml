@@ -1,4 +1,4 @@
-name: bridgestan tests
+name: deadlock tests
 
 on:
   push:
@@ -7,22 +7,14 @@ on:
   pull_request:
   workflow_dispatch: {}
 
-env:
-  CACHE_VERSION: 3
-
-# only run one copy per PR
-concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
-  cancel-in-progress: true
-
 jobs:
 
   julia:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        os: [windows-latest]
-        julia-version: ["1"]
+        os: [windows-latest, ubuntu-latest]
+        julia-version: ["1.12", "lts"]
         shell: [bash, pwsh]
       fail-fast: false
     defaults:
@@ -41,5 +33,6 @@ jobs:
         run: git clone --recursive https://github.com/stan-dev/cmdstan.git --depth 1 --shallow-submodules
 
       - name: run make inside julia
+        timeout-minutes: 60
         run: |
           julia --project=. ./run.jl
