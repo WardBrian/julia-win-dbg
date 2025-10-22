@@ -40,9 +40,9 @@ jobs:
           version: ${{ matrix.julia-version }}
 
       - name: download large repo
-        run: git clone --recursive https://github.com/stan-dev/cmdstan.git
+        run: git clone --recursive https://github.com/stan-dev/cmdstan.git --depth 1 --shallow-submodules
 
       - name: run make inside julia
-        run:
-          cd cmdstan/
+        run: |
+          cd cmdstan
           julia --project=. --eval "run(`make build`)"
