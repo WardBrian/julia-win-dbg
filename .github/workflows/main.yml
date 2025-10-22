@@ -15,7 +15,7 @@ jobs:
         os: [windows-latest, windows-2022]
         julia-version: ["1.12", "lts"]
         shell: [bash, pwsh]
-        use-julia: [true, false]
+        use-julia: ["yes", "no", "juliaup"]
       fail-fast: false
     defaults:
       run:
@@ -25,22 +25,28 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Set up Julia
-        if: matrix.use-julia == true
+        if: matrix.use-julia == 'yes'
         uses: julia-actions/setup-julia@v2
         with:
           version: ${{ matrix.julia-version }}
+
+      - uses: julia-actions/install-juliaup@v2
+        if: matrix.use-julia == 'juliaup'
+        with:
+          channel: ${{ matrix.julia-version }}
+
 
       - name: download large repo
         run: git clone --recursive https://github.com/roualdes/bridgestan.git --depth 1 --shallow-submodules
 
       - name: run make inside julia
-        if: matrix.use-julia == true
+        if: matrix.use-julia != 'no'
         timeout-minutes: 60
         run: |
           julia --project=. ./run.jl
 
       - name: run make directly
-        if: matrix.use-julia == false
+        if: matrix.use-julia == 'no'
         timeout-minutes: 60
         run: |
           cd bridgestan
