@@ -49,5 +49,5 @@ jobs:
         if: matrix.use-julia == 'no'
         timeout-minutes: 60
         run: |
-          cd bridgestan
+          cd tinystan
           make test_models/bernoulli/bernoulli_model.so
