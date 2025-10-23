@@ -37,7 +37,7 @@ jobs:
 
 
       - name: download large repo
-        run: git clone --recursive https://github.com/roualdes/bridgestan.git --depth 1 --shallow-submodules
+        run: git clone --recursive https://github.com/wardbrian/tinystan.git --depth 1 --shallow-submodules
 
       - name: run make inside julia
         if: matrix.use-julia != 'no'
